@@ -1,0 +1,5 @@
+Whaat should I add?
+2D game with framebuffer
+update main.py to use dir
+voice reconition
+i2c system wide suppopt???
