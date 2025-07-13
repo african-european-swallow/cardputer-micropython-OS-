@@ -1,0 +1,228 @@
+#s
+0.175
+#v
+/nose    0
+-14,0,0
+
+/nose-L    1
+-12,0,-1
+
+/nose-R    2
+-12,0,1
+
+/nose rise    3
+-9,1.5,0
+
+/top point    4
+-7,5,0
+
+/bottom point    5
+-6,-2,0
+
+/delta front point-L    6
+-11,0,-1.5
+
+/delta front point-R    7
+-11,0,1.5
+
+/intake L #1    8
+-8.5,0.75,-1    
+/intake L #2    9
+-8,2,-1
+/intake L #3    10
+-7,2,-2.5
+/intake L #4    11
+-8,0.75,-3
+
+/intake R #1    12
+-8.5,0.75,1  
+/13             13
+0,0,0
+/intake R #2    14
+-8,2,1
+/intake R #3    15
+-7,2,2.5
+/intake R #4    16
+-8,0.75,3
+
+/delta fmid^ LOW L    17
+-6,0,-4
+/delta fmid^ HIGH L    18
+-5.5,2.25,-3
+
+/delta fmid^ LOW R    19
+-6,0,4
+/delta fmid^ HIGH R    20
+-5.5,2.25,3
+
+/delta front L    21
+10,0,-13
+/delta end L    22
+12,0,-12
+
+/delta front R    23
+10,0,13
+/delta end R    24
+12,0,12
+
+/fusa low L   25
+0,0,-5
+/fusa high L    26
+1,2.5,-4.5
+
+/fusa low R   27
+0,0,5
+/fusa high R    28
+1,2.5,4.5
+
+/delta LOWER front L    29
+10,-1,-12
+/delta LOWER back L    30
+10.5,-1,-11.5
+
+/delta LOWER front R    31
+10,-1,12
+/delta LOWER back R    32
+10.5,-1,11.5
+
+/2nd top point    33
+5,3,0
+
+/bottem mid point    34
+9,-1,0
+
+/bottom point L    35
+4.5,-1,-3
+
+/bottom point R    36
+4.5,-1,3
+
+/back #1 LOW L    37
+7,0,-4
+/back #2 LOW L    38
+8,0,-4
+/back #1 HIGH L    39
+7,0,-3
+
+/back #1 LOW R    40
+7,0,4
+/back #2 LOW R    41
+8,0,4
+/back #1 HIGH R    42
+7,0,3
+
+/back LOW    43
+12,0,0
+/back HIGH    44
+11,1,0
+
+/tail origin FRONT L    45
+8,1,-1
+/tail origin BACK L    46
+11,0.5,-1
+
+/tail origin FRONT R    47
+8,1,1
+/tail origin BACK R    48
+11,0.5,1
+
+/tail front TOP L    49
+12.5,6,-3
+/tail back TOP L    50
+15,6,-3
+
+/tail front TOP R    51
+12.5,6,3
+/tail back TOP R    52
+15,6,3
+#e
+/front 4 points
+0,3
+0,1
+0,2
+1,3
+2,3
+/next front points
+1,6
+2,7
+6,4
+7,4
+
+/air intakes L
+6,8
+8,9
+9,10
+10,11
+8,11
+6,11
+10,18
+11,17
+17,18
+/air intake R
+7,12
+12,14
+14,15
+15,16
+16,12
+7,16
+15,20
+16,19
+20,19
+/sides
+19,27
+20,28
+28,27
+4,28
+20,4
+18,4
+25,17
+18,26
+25,26
+26,4
+4,33
+26,33
+28,33
+/rear and wing
+19,23
+23,24
+24,40
+27,40
+40,41
+42,40
+28,42
+17,21
+21,22
+25,37
+37,38
+22,37
+37,39
+26,39
+38,43
+41,43
+39,44
+42,44
+44,43
+33,44
+/tail
+47,51
+51,52
+52,48
+45,49
+49,50
+50,46
+/bottom
+0,5
+5,29
+29,30
+30,35
+35,34
+36,34
+34,43
+36,32
+31,32
+3,31
+31,23
+32,24
+21,29
+30,22
+5,31
