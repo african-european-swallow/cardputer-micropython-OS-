@@ -165,10 +165,11 @@ class ShellPrinter:
         self.height = height
         self.fontty = '8x8'
         self.line_height = self._get_line_height()
-        self.max_lines = height // self.line_height
+        self.max_lines = self.height // self.line_height
         self.buffer = []
         self.color = (255, 255, 255)
         self.font = self._load_font(self.fontty)
+        self.anchor_index = 0  # line index in buffer where input starts
 
     def _get_line_height(self):
         return 8 if self.fontty == '8x8' else (30 if self.fontty == '16x32' else 14)
@@ -181,18 +182,13 @@ class ShellPrinter:
         elif font_type == '16x16':
             from font import vga2_16x16 as font
         else:
-            font = None
+            raise ValueError("Unknown font type")
         return font
 
     def _render(self):
-        if not self.font:
-            raise ValueError("Font not set. Please set a valid font using set_font.")
         tft.fill(0)
-        for i, line in enumerate(self.buffer):
-            tft.text(
-                self.font, line, 0, i * self.line_height,
-                st7789.color565(*self.color)
-            )
+        for i, line in enumerate(self.buffer[-self.max_lines:]):
+            tft.text(self.font, line, 0, i * self.line_height, st7789.color565(*self.color))
 
     def set_color(self, color):
         self.color = color
@@ -216,77 +212,72 @@ class ShellPrinter:
         return [text[i:i+max_chars] for i in range(0, len(text), max_chars)]
 
     def print(self, text):
-        wrapped_lines = self._wrap_text(text)
-        changed = False
-        for line in wrapped_lines:
+        for line in self._wrap_text(text):
             if len(self.buffer) >= self.max_lines:
                 self.buffer.pop(0)
-                changed = True
             self.buffer.append(line)
-            changed = True
-        if changed:
-            self._render()
+        self._render()
 
     def printin(self, text):
-        wrapped_lines = self._wrap_text(text)
-        changed = False
-        lenwork = self.lineused
-        for line in wrapped_lines:
-            idx = len(self.buffer) - lenwork
-            if 0 <= idx < len(self.buffer):
-                if self.buffer[idx] != line:
-                    self.buffer[idx] = line
-                    changed = True
-            lenwork -= 1
-        if changed:
-            self._render()
+        wrapped = self._wrap_text(text)
+        for i, line in enumerate(wrapped):
+            idx = self.anchor_index + i
+            if idx < len(self.buffer):
+                self.buffer[idx] = line
+            else:
+                self.buffer.append(line)
+        self._render()
 
     def input(self, prompt):
         self.lineused = self.checklen(prompt)
-        self.buffer += [' '] * self.lineused
+        self.anchor_index = len(self.buffer)
+        self.buffer += [''] * self.lineused
         self.printin(prompt)
 
         kb = KeyBoard()
         input_chars = []
         prev_keys = []
-        used_keys = []
-        last_render = ""
+        held_keys = []
+        last = ''
 
         while True:
             keys = kb.get_pressed_keys()
             if keys != prev_keys:
                 for key in keys:
+                    if key in held_keys:
+                        continue
                     if key == 'ENT':
                         result = ''.join(input_chars)
                         self.printin(prompt + result)
                         time.sleep(0.25)
                         return result
-                    elif key == 'BSPC':
-                        if input_chars:
-                            input_chars.pop()
+                    elif key == 'BSPC' and input_chars:
+                        input_chars.pop()
                     elif key == 'TAB':
                         input_chars.extend([' '] * 4)
                     elif key == 'ESC':
                         return ''
-                    elif key in ['UP', 'DOWN', 'LEFT', 'RIGHT']:
-                        continue
-                    elif key not in used_keys:
+                    elif key not in ['UP', 'DOWN', 'LEFT', 'RIGHT']:
                         input_chars.append(key)
-                        used_keys.append(key)
+                    held_keys.append(key)
 
-                for key in used_keys[:]:
+                for key in held_keys[:]:
                     if key not in keys:
-                        used_keys.remove(key)
+                        held_keys.remove(key)
 
-                current = prompt + ''.join(input_chars)
-                if self.checklen(current) > self.lineused:
-                    while self.checklen(current) > self.lineused:
-                        self.buffer.append(' ')
-                        self.buffer.pop(0)
-                        self.lineused += 1
+                full_text = prompt + ''.join(input_chars)
 
-                if current != last_render:
-                    self.printin(current)
-                    last_render = current
+                # If text grew beyond initial space, shift buffer
+                while self.checklen(full_text) > self.lineused:
+                    self.buffer.append('')
+                    self.buffer.pop(0)
+                    self.anchor_index -= 1
+                    self.lineused += 1
+
+                if full_text != last:
+                    self.printin(full_text)
+                    last = full_text
 
                 prev_keys = keys
+
+
