@@ -59,11 +59,11 @@ class SeesawGamepad:
             time.sleep(delay)
             
     def pressing(self):
-        transfer = {0:'select',
+        self.transfer = {0:'select',
                    1:'b',
                    2:'y',
                    5:'a',
                    6:'x',
                    16:'start'}
-        return [transfer[b] for b in read_buttons() if b in transfer]
+        return [self.transfer[b] for b in self.read_buttons() if b in self.transfer]
 
