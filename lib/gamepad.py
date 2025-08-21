@@ -58,7 +58,7 @@ class SeesawGamepad:
             print("Buttons pressed:", buttons)
             time.sleep(delay)
             
-    def pressing():
+    def pressing(self):
         transfer = {0:'select',
                    1:'b',
                    2:'y',
