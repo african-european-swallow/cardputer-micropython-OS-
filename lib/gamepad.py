@@ -2,11 +2,12 @@ import time
 import seesaw
 
 class SeesawGamepad:
-    def __init__(self, joystick_xx=14, joystick_yx=15, joystick_xy=14, joystick_yy=16, button_pins=None):
+    def __init__(self, joystick_xx=14, joystick_yx=15, joystick_xy=14, joystick_yy=16, button_pins=[0, 1, 2, 5, 6, 16]):
         self.JOY_XX = joystick_xx
         self.JOY_YX = joystick_yx
         self.JOY_XY = joystick_xy
         self.JOY_YY = joystick_yy
+        
         
         # Default button pins if none specified
         if button_pins is None:
@@ -56,3 +57,13 @@ class SeesawGamepad:
             print(f"Joystick X: {x}, Y: {y}")
             print("Buttons pressed:", buttons)
             time.sleep(delay)
+            
+    def pressing():
+        transfer = {0:'select',
+                   1:'b',
+                   2:'y',
+                   5:'a',
+                   6:'x',
+                   16:'start'}
+        return [transfer[b] for b in read_buttons() if b in transfer]
+
