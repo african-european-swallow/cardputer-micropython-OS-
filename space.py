@@ -158,7 +158,17 @@ def keep_out_of_planets():
             player['vel'][0] = p['vel'][0]
             player['vel'][1] = p['vel'][1]
             landed = True
-            
+
+def resolve_collision(a, b):
+    m1, m2 = a['mass'], b['mass']
+    u1x, u1y = a['vel']
+    u2x, u2y = b['vel']
+
+    a['vel'][0] = (u1x * (m1 - m2) + 2 * m2 * u2x) / (m1 + m2)
+    a['vel'][1] = (u1y * (m1 - m2) + 2 * m2 * u2y) / (m1 + m2)
+    b['vel'][0] = (u2x * (m2 - m1) + 2 * m1 * u1x) / (m1 + m2)
+    b['vel'][1] = (u2y * (m2 - m1) + 2 * m1 * u1y) / (m1 + m2)
+
 def separate_planets():
     for i, a in enumerate(planets):
         for j in range(i + 1, len(planets)):
@@ -176,10 +186,7 @@ def separate_planets():
                 a['pos'][1] -= ny * overlap / 2
                 b['pos'][0] += nx * overlap / 2
                 b['pos'][1] += ny * overlap / 2
-                if a['mass'] >= b['mass']:
-                    b['vel'][0], b['vel'][1] = a['vel'][0], a['vel'][1]
-                else:
-                    a['vel'][0], a['vel'][1] = b['vel'][0], b['vel'][1]
+                resolve_collision(a, b)
 
 def planet_gravity():
     for i, a in enumerate(planets):
@@ -530,3 +537,5 @@ def main():
         time.sleep(0.01)
 
 main()
+
+
